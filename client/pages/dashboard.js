@@ -31,6 +31,8 @@ export default function Dashboard() {
 const [openPopup, setOpenPopup] = useState(false);
   const router = useRouter();
 
+  
+
   // Listen to changes for loading and authUser, redirect if needed
   useEffect(() => {
     if (!isLoading && !authUser) {
