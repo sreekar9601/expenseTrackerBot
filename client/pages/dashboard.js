@@ -7,10 +7,13 @@ import NavBar from "../components/navbar";
 import { useAuth } from "../firebase/auth";
 import styles from "../styles/dashboard.module.scss";
 import Popup from "../components/Popup";
+import { getExpense } from "../firebase/firestore";
+import { ExpenseRow } from "../components/expenseRow";
 
 export default function Dashboard() {
   const { authUser, isLoading } = useAuth();
   const [openPopup, setOpenPopup] = useState(false);
+  const [expenses, setExpenses] = useState([]);
   const router = useRouter();
 
   // Listen to changes for loading and authUser, redirect if needed
@@ -20,6 +23,20 @@ export default function Dashboard() {
     }
   }, [authUser, isLoading]);
   const onClickAdd = () => {};
+
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const userExpenses = await getExpense(authUser.uid);
+        setExpenses(userExpenses);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (authUser) {
+      fetchExpenses();
+    }
+  }, [authUser]);
 
   return !authUser ? (
     <CircularProgress
@@ -37,6 +54,16 @@ export default function Dashboard() {
         <Typography variant="h4" sx={{ lineHeight: 2, paddingRight: "0.5em" }}>
           EXPENSES
         </Typography>
+        <div >
+          {expenses.map((expense) => (
+            <ExpenseRow 
+              key={expense.id}
+              name={expense.name}
+              amount={expense.amount}
+              date={expense.date}
+            />
+          ))}
+        </div>
         <IconButton
           aria-label="edit"
           color="secondary"

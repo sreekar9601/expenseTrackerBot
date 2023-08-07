@@ -10,3 +10,25 @@ export function addExpense(uid, name, amount, date) {
     date
   })
 }
+
+export async function getExpense(uid) {
+  const exp = query(collection(db, "users", uid, "expenses"), orderBy("date"));
+  try{
+const querySnapshot = await getDocs(exp);
+const expenses = [];
+querySnapshot.forEach((doc)=>{
+  const expenseData = doc.data();//gets name amount date
+  expenses.push({
+    id:doc.id,
+    ...expenseData// Spread operator combines id and expenseData(...)
+  });
+});
+return expenses;
+  }
+  catch(err){
+    console.log(err);
+  }
+
+          
+
+}
