@@ -9,6 +9,7 @@ import styles from "../styles/dashboard.module.scss";
 import Popup from "../components/Popup";
 import { getExpense } from "../firebase/firestore";
 import { ExpenseRow } from "../components/expenseRow";
+import { deleteExpense } from "../firebase/firestore";
 
 export default function Dashboard() {
   const { authUser, isLoading } = useAuth();
@@ -38,6 +39,17 @@ export default function Dashboard() {
     }
   }, [authUser]);
 
+  const onDelete = async (expenseId) => {
+    try{
+      await deleteExpense(authUser.uid, expenseId);
+      const newExpenses = expenses.filter((expense)=>expense.id!==expenseId);
+      setExpenses(newExpenses);
+    }
+    catch(err){
+      console.log("Could not delete expense", err);
+    }
+  }
+
   return !authUser ? (
     <CircularProgress
       color="inherit"
@@ -57,10 +69,11 @@ export default function Dashboard() {
         <div>
           {expenses.map((expense) => (
             <ExpenseRow
-              key={expense.id}
+              id={expense.id}
               name={expense.name}
               amount={expense.amount}
               date={expense.date}
+              onDelete = {onDelete}
             />
           ))}
         </div>
