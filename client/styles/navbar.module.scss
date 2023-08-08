@@ -1,10 +1,23 @@
+// styles/navbar.module.scss
+
 @import "variables.module";
 
-.container {
-    display: flex;
+.appbar {
+  background-color: $primary; // Update with your color
 }
 
 .toolbar {
-    align-self: center;
-    width: 1200px;
+  width: 100%; // Make the toolbar full width
+}
+
+.navbarContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 8px; // Add a gap between the elements
 }

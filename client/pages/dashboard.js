@@ -50,34 +50,24 @@ export default function Dashboard() {
       </Head>
 
       <NavBar />
-      <Grid
-        container
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        className={styles.title} // Apply the "title" style class
-      >
-        <Typography variant="h4" sx={{ lineHeight: 2 }}>
-          Expenses
-        </Typography>
-        <Fab
-          color="secondary"
-          aria-label="add"
-          onClick={handleAddExpense}
-          className={styles.addButton}
-          sx={{ marginTop: "1em" }} // Add marginTop to the plus button
-        >
-          <AddIcon />
-        </Fab>
-      </Grid>
-
-      {isLoading ? (
-        <CircularProgress
-          color="primary"
-          sx={{ margin: "auto", marginTop: "2em" }}
-        />
-      ) : (
-        <div className={styles.expenseListContainer}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <Typography variant="h4">Expenses</Typography>
+          <Fab
+            color="secondary"
+            aria-label="add"
+            onClick={handleAddExpense}
+            className={styles.addButton}
+          >
+            <AddIcon />
+          </Fab>
+        </div>
+        {isLoading ? (
+          <CircularProgress
+            color="primary"
+            sx={{ margin: "auto", marginTop: "2em" }}
+          />
+        ) : (
           <div className={styles.expenseList}>
             {expenses.map((expense) => (
               <ExpenseRow
@@ -88,8 +78,8 @@ export default function Dashboard() {
               />
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} />
     </div>

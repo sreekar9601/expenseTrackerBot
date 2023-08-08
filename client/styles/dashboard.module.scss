@@ -3,26 +3,45 @@
 @import "variables.module";
 
 .addButton {
-  position: relative;
-  stroke: $secondary;
-  stroke-width: 2;
+  background-color: $secondary;
+  color: #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.title {
+.addButton:hover {
+  background-color: darken($secondary, 10%);
+  transform: scale(1.05);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+  max-width: 75%;
+  margin: auto;
+}
+
+.header {
   display: flex;
   justify-content: space-between;
-  padding: 1em 1em 0;
-}
-
-.expenseListContainer {
-  display: flex;
-  justify-content: center;
-  margin: auto;
-  max-width: 75%;
-  padding: 1em;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1em;
 }
 
 .expenseList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   border-collapse: collapse;
 }

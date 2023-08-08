@@ -1,36 +1,67 @@
+import React from "react";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Stack,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { useAuth, signOut } from "../firebase/auth";
+import { useRouter } from "next/router";
+import { styled } from "@mui/system"; // Import styled from @mui/system
 
-import { AppBar, Box, Button, Container, Stack, Toolbar, Typography } from '@mui/material';
-import { useAuth, signOut } from '../firebase/auth';
-import styles from '../styles/navbar.module.scss';
-import { useRouter } from 'next/router';
+const StyledAppBar = styled(AppBar)({
+  backgroundColor: (theme) => theme.palette.primary.main,
+});
 
+const StyledToolbar = styled(Toolbar)({
+  width: "100%",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
 
+const StyledContainer = styled(Container)({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
+
+const StyledTitle = styled(Typography)({
+  flexGrow: 1,
+  alignSelf: "center",
+  cursor: "pointer",
+});
+
+const StyledUserSection = styled(Stack)({
+  display: "flex",
+  alignItems: "center",
+  gap: (theme) => theme.spacing(2),
+});
 
 export default function NavBar() {
+  const router = useRouter();
+  const { authUser, signOut } = useAuth();
 
-  
-const router = useRouter();
-
-  const {authUser, signOut} = useAuth()
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" className={styles.appbar}>
-        <Toolbar className={styles.toolbar}>
-          <Container className={styles.container}>
-            <Typography onClick={()=>router.push('/dashboard')} variant="h3" sx={{ flexGrow: 1, alignSelf: "center" }}>
+      <StyledAppBar position="static">
+        <StyledToolbar>
+          <StyledContainer>
+            <StyledTitle onClick={() => router.push("/dashboard")} variant="h3">
               EXPENSE TRACKER
-            </Typography>
-            <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
-              <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                {authUser?.email}
-              </Typography>
-              <Button variant="text" color="secondary" onClick={signOut}>
+            </StyledTitle>
+            <StyledUserSection direction="row" spacing={2}>
+              <Typography variant="h6">{authUser?.email}</Typography>
+              <Button variant="outlined" color="secondary" onClick={signOut}>
                 Logout
               </Button>
-            </Stack>
-          </Container>
-        </Toolbar>
-      </AppBar>
+            </StyledUserSection>
+          </StyledContainer>
+        </StyledToolbar>
+      </StyledAppBar>
     </Box>
   );
 }
