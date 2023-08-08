@@ -1,11 +1,13 @@
+// dashboard.js
+
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { CircularProgress, IconButton, Stack, Typography } from "@mui/material";
+import { CircularProgress, Fab, Grid, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import NavBar from "../components/navbar";
 import { useAuth } from "../firebase/auth";
-import styles from "../styles/dashboard.module.scss";
+import styles from "../styles/dashboard.module.scss"; // Make sure this path is correct
 import Popup from "../components/Popup";
 import { getExpense } from "../firebase/firestore";
 import { ExpenseRow } from "../components/expenseRow";
@@ -16,64 +18,80 @@ export default function Dashboard() {
   const [expenses, setExpenses] = useState([]);
   const router = useRouter();
 
-  // Listen to changes for loading and authUser, redirect if needed
   useEffect(() => {
     if (!isLoading && !authUser) {
       router.push("/");
     }
   }, [authUser, isLoading]);
-  const onClickAdd = () => {};
 
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const userExpenses = await getExpense(authUser.uid);
-        setExpenses(userExpenses);
+        if (authUser) {
+          const userExpenses = await getExpense(authUser.uid);
+          setExpenses(userExpenses);
+        }
       } catch (err) {
-        console.log(err);
+        console.error("Error fetching expenses:", err);
       }
     };
-    if (authUser) {
-      fetchExpenses();
-    }
+
+    fetchExpenses();
   }, [authUser]);
 
-  return !authUser ? (
-    <CircularProgress
-      color="inherit"
-      sx={{ marginLeft: "50%", marginTop: "25%" }}
-    />
-  ) : (
+  const handleAddExpense = () => {
+    setOpenPopup(true);
+  };
+
+  return (
     <div>
       <Head>
         <title>Expense Tracker</title>
       </Head>
 
       <NavBar />
-      <Stack direction="row" sx={{ paddingTop: "1.5em" }}>
-        <Typography variant="h4" sx={{ lineHeight: 2, paddingRight: "0.5em" }}>
-          EXPENSES
+      <Grid
+        container
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        className={styles.title} // Apply the "title" style class
+      >
+        <Typography variant="h4" sx={{ lineHeight: 2 }}>
+          Expenses
         </Typography>
-        <div>
-          {expenses.map((expense) => (
-            <ExpenseRow
-              key={expense.id}
-              name={expense.name}
-              amount={expense.amount}
-              date={expense.date}
-            />
-          ))}
-        </div>
-        <IconButton
-          aria-label="edit"
+        <Fab
           color="secondary"
+          aria-label="add"
+          onClick={handleAddExpense}
           className={styles.addButton}
-          onClick={() => setOpenPopup(true)}
+          sx={{ marginTop: "1em" }} // Add marginTop to the plus button
         >
           <AddIcon />
-        </IconButton>
-        <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}></Popup>
-      </Stack>
+        </Fab>
+      </Grid>
+
+      {isLoading ? (
+        <CircularProgress
+          color="primary"
+          sx={{ margin: "auto", marginTop: "2em" }}
+        />
+      ) : (
+        <div className={styles.expenseListContainer}>
+          <div className={styles.expenseList}>
+            {expenses.map((expense) => (
+              <ExpenseRow
+                key={expense.id}
+                name={expense.name}
+                amount={expense.amount}
+                date={expense.date}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} />
     </div>
   );
 }

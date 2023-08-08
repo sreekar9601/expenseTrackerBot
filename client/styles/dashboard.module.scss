@@ -1,10 +1,45 @@
+/* dashboard.module.scss */
+
 @import "variables.module";
 
 .addButton {
+  position: relative;
   stroke: $secondary;
   stroke-width: 2;
 }
 
 .title {
+  display: flex;
+  justify-content: space-between;
   padding: 1em 1em 0;
 }
+
+.expenseListContainer {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  max-width: 75%;
+  padding: 1em;
+}
+
+.expenseList {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.expenseList th,
+.expenseList td {
+  padding: 0.5em;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.expenseList th {
+  background-color: #f5f5f5;
+}
+
+.expenseList td {
+  background-color: #ffffff;
+}
+
+/* Import and use more styles as needed */
