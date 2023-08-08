@@ -32,4 +32,12 @@ return expenses;
           
 
 }
-//TODO: ADD DELETEEXPENSE FUNCTION
+export async function deleteExpense(uid, expenseId){
+  try{const exp = doc(db, "users", uid, "expenses", expenseId);
+  await deleteDoc(exp);
+  console.log("Expense deleted");}
+  catch(err){
+    console.log(err);
+  }
+
+}
