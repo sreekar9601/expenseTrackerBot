@@ -54,9 +54,9 @@ export default function Dashboard() {
         <Typography variant="h4" sx={{ lineHeight: 2, paddingRight: "0.5em" }}>
           EXPENSES
         </Typography>
-        <div >
+        <div>
           {expenses.map((expense) => (
-            <ExpenseRow 
+            <ExpenseRow
               key={expense.id}
               name={expense.name}
               amount={expense.amount}
